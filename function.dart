@@ -14,8 +14,13 @@ doThree(someNumber) {
   print(someNumber);
 }
 
+doFour({someNumber}) {
+  print(someNumber);
+}
+
 main() {
   doOne();
   doTwo();
   doThree(3);
+  doFour(someNumber: 4);
 }
