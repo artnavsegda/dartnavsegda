@@ -1,5 +1,9 @@
+int returnOne() {
+  return 1;
+}
+
 doOne() {
-  print("Do one");
+  print(returnOne());
 }
 
 void doTwo() {
