@@ -1,8 +1,12 @@
-doSomething(){
-	print("Do something!");
+doOne() {
+  print("Do one");
+}
+
+void doTwo() {
+  print("Do two");
 }
 
 main() {
-	doSomething();
+  doOne();
+  doTwo();
 }
-
