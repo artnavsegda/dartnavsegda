@@ -1,7 +1,10 @@
 class MyClass {
   MyClass(greeting);
+  static String hello(name) {
+    return "Hello World";
+  }
 }
 
 main() {
-  print("Hello World!");
+  print(MyClass.hello("World"));
 }
