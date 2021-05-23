@@ -1,10 +1,11 @@
 class MyClass {
-  MyClass(greeting);
-  static String hello(name) {
-    return "Hello World";
+  String greeting;
+  MyClass(this.greeting);
+  String hello(name) {
+    return this.greeting + " " + name;
   }
 }
 
 main() {
-  print(MyClass.hello("World"));
+  print(MyClass("Hello").hello("World"));
 }
