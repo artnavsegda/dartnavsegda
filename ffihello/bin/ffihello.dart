@@ -1,15 +1,17 @@
 import 'package:ffihello/ffihello.dart' as ffihello;
-import 'dart:ffi' as ffi;
+import 'dart:ffi';
+import 'package:ffi/ffi.dart';
 
-typedef HelloWorld = void Function();
-typedef hello_world_func = ffi.Void Function();
+typedef HelloWorldFunc = Void Function(Pointer<Void> handle);
+typedef HelloWorld = void Function(Pointer<Void> handle);
 
 void main(List<String> arguments) {
   print('Hello world: ${ffihello.calculate()}!');
-  final dylib = ffi.DynamicLibrary.open(
+  final dylib = DynamicLibrary.open(
       "C:\\Program Files\\ATOL\\Drivers10\\KKT\\bin\\fptr10.dll");
+  Pointer<Void> fptr;
   final HelloWorld hello = dylib
-      .lookup<ffi.NativeFunction<hello_world_func>>('libfptr_create')
+      .lookup<NativeFunction<HelloWorldFunc>>('libfptr_create')
       .asFunction();
-  hello();
+  hello(fptr);
 }
