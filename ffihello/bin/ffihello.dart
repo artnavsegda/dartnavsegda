@@ -22,6 +22,7 @@ void main(List<String> arguments) {
 
   Pointer<Int32> fptr = calloc<Int32>();
   fptrCreate(fptr as Pointer<Void>);
+
   final version = fptrGetVersionString();
   print(version.toDartString());
 }
