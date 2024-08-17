@@ -9,7 +9,7 @@ void main(List<String> arguments) {
   print('Hello world: ${ffihello.calculate()}!');
   final dylib = DynamicLibrary.open(
       "C:\\Program Files\\ATOL\\Drivers10\\KKT\\bin\\fptr10.dll");
-  Pointer<Void> fptr;
+  final fptr = calloc<Void>();
   final HelloWorld hello = dylib
       .lookup<NativeFunction<HelloWorldFunc>>('libfptr_create')
       .asFunction();
