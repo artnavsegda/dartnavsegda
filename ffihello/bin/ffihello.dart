@@ -5,8 +5,8 @@ import 'package:ffi/ffi.dart';
 typedef FptrCreateFunc = Void Function(Pointer<Void> handle);
 typedef FptrCreate = void Function(Pointer<Void> handle);
 
-typedef FptrGetVersionStrigFunc = Void Function();
-typedef FptrGetVersionStrig = void Function();
+typedef FptrGetVersionStrigFunc = Pointer<Utf8> Function();
+typedef FptrGetVersionStrig = Pointer<Utf8> Function();
 
 void main(List<String> arguments) {
   print('Hello world: ${ffihello.calculate()}!');
@@ -22,5 +22,6 @@ void main(List<String> arguments) {
 
   Pointer<Int32> fptr = calloc<Int32>();
   fptrCreate(fptr as Pointer<Void>);
-  fptrGetVersionString();
+  final version = fptrGetVersionString();
+  print(version.toDartString());
 }
