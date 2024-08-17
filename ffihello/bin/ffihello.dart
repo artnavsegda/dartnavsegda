@@ -59,20 +59,20 @@ void main(List<String> arguments) {
   final version = fptrGetVersionString();
   print(version.toDartString());
 
-  Pointer<Void> fptr = calloc<Int32>() as Pointer<Void>;
+  int result;
+  Pointer<Void> fptr = nullptr;
   print('1');
-  fptrCreate(fptr);
-  print('2');
+  result = fptrCreate(fptr);
+  print('2 $result');
   fptrShowProperties(fptr, 0, nullptr);
   print('3');
-  fptrDestroy(fptr);
-  print('4');
-
-  return;
-
   fptrOpen(fptr);
-  print('3');
+  print('4');
   print("kkt is ${fptrIsOpened(fptr)}");
   fptrClose(fptr);
-  print('4');
+  print('5');
+  fptrDestroy(fptr);
+  print('6');
+
+  return;
 }
