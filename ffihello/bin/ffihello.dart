@@ -5,20 +5,25 @@ import 'package:ffi/ffi.dart';
 typedef FptrGetVersionStrigFunc = Pointer<Utf8> Function();
 typedef FptrGetVersionStrig = Pointer<Utf8> Function();
 
-typedef FptrCreateFunc = Void Function(Pointer<Void> handle);
-typedef FptrCreate = void Function(Pointer<Void> handle);
+typedef FptrCreateFunc = Int Function(Pointer<Void> handle);
+typedef FptrCreate = int Function(Pointer<Void> handle);
 
-typedef FptrDestroyFunc = Void Function(Pointer<Void> handle);
-typedef FptrDestroy = void Function(Pointer<Void> handle);
+typedef FptrDestroyFunc = Int Function(Pointer<Void> handle);
+typedef FptrDestroy = int Function(Pointer<Void> handle);
 
-typedef FptrOpenFunc = Void Function(Pointer<Void> handle);
-typedef FptrOpen = void Function(Pointer<Void> handle);
+typedef FptrShowPropertiesFunc = Int Function(
+    Pointer<Void> handle, Int parentType, Pointer<Int>);
+typedef FptrShowProperties = int Function(
+    Pointer<Void> handle, int parentType, Pointer<Int>);
+
+typedef FptrOpenFunc = Int Function(Pointer<Void> handle);
+typedef FptrOpen = int Function(Pointer<Void> handle);
 
 typedef FptrIsOpenedFunc = Bool Function(Pointer<Void> handle);
 typedef FptrIsOpened = bool Function(Pointer<Void> handle);
 
-typedef FptrCloseFunc = Void Function(Pointer<Void> handle);
-typedef FptrClose = void Function(Pointer<Void> handle);
+typedef FptrCloseFunc = Int Function(Pointer<Void> handle);
+typedef FptrClose = int Function(Pointer<Void> handle);
 
 void main(List<String> arguments) {
   final dylib = DynamicLibrary.open(
