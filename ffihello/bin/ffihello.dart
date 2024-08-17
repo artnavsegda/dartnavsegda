@@ -20,7 +20,7 @@ void main(List<String> arguments) {
           'libfptr_get_version_string')
       .asFunction();
 
-  Pointer<Void> fptr = calloc<Void>();
-  fptrCreate(fptr);
+  Pointer<Int32> fptr = calloc<Int32>();
+  fptrCreate(fptr as Pointer<Void>);
   fptrGetVersionString();
 }
