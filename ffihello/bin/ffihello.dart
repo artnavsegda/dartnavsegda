@@ -2,27 +2,66 @@ import 'package:ffihello/ffihello.dart' as ffihello;
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 
-typedef FptrCreateFunc = Void Function(Pointer<Void> handle);
-typedef FptrCreate = void Function(Pointer<Void> handle);
-
 typedef FptrGetVersionStrigFunc = Pointer<Utf8> Function();
 typedef FptrGetVersionStrig = Pointer<Utf8> Function();
 
+typedef FptrCreateFunc = Void Function(Pointer<Void> handle);
+typedef FptrCreate = void Function(Pointer<Void> handle);
+
+typedef FptrDestroyFunc = Void Function(Pointer<Void> handle);
+typedef FptrDestroy = void Function(Pointer<Void> handle);
+
+typedef FptrOpenFunc = Void Function(Pointer<Void> handle);
+typedef FptrOpen = void Function(Pointer<Void> handle);
+
+typedef FptrIsOpenedFunc = Bool Function(Pointer<Void> handle);
+typedef FptrIsOpened = bool Function(Pointer<Void> handle);
+
+typedef FptrCloseFunc = Void Function(Pointer<Void> handle);
+typedef FptrClose = void Function(Pointer<Void> handle);
+
 void main(List<String> arguments) {
-  print('Hello world: ${ffihello.calculate()}!');
   final dylib = DynamicLibrary.open(
       "C:\\Program Files\\ATOL\\Drivers10\\KKT\\bin\\fptr10.dll");
-  final FptrCreate fptrCreate = dylib
-      .lookup<NativeFunction<FptrCreateFunc>>('libfptr_create')
-      .asFunction();
+
   final FptrGetVersionStrig fptrGetVersionString = dylib
       .lookup<NativeFunction<FptrGetVersionStrigFunc>>(
           'libfptr_get_version_string')
       .asFunction();
 
-  Pointer<Int32> fptr = calloc<Int32>();
-  fptrCreate(fptr as Pointer<Void>);
+  final FptrCreate fptrCreate = dylib
+      .lookup<NativeFunction<FptrCreateFunc>>('libfptr_create')
+      .asFunction();
+
+  final FptrDestroy fptrDestroy = dylib
+      .lookup<NativeFunction<FptrDestroyFunc>>('libfptr_destroy')
+      .asFunction();
+
+  final FptrOpen fptrOpen =
+      dylib.lookup<NativeFunction<FptrOpenFunc>>('libfptr_open').asFunction();
+
+  final FptrIsOpened fptrIsOpened = dylib
+      .lookup<NativeFunction<FptrIsOpenedFunc>>('libfptr_is_opened')
+      .asFunction();
+
+  final FptrClose fptrClose =
+      dylib.lookup<NativeFunction<FptrCloseFunc>>('libfptr_close').asFunction();
 
   final version = fptrGetVersionString();
   print(version.toDartString());
+
+  Pointer<Void> fptr = calloc<Int32>() as Pointer<Void>;
+  print('1');
+  fptrCreate(fptr);
+  print('2');
+  fptrDestroy(fptr);
+  print('3');
+
+  return;
+
+  fptrOpen(fptr);
+  print('3');
+  print("kkt is ${fptrIsOpened(fptr)}");
+  fptrClose(fptr);
+  print('4');
 }
