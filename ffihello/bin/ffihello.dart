@@ -5,14 +5,14 @@ import 'package:ffi/ffi.dart';
 typedef FptrGetVersionStrigFunc = Pointer<Utf8> Function();
 typedef FptrGetVersionStrig = Pointer<Utf8> Function();
 
-typedef FptrCreateFunc = Int Function(Pointer<Void> handle);
-typedef FptrCreate = int Function(Pointer<Void> handle);
+typedef FptrCreateFunc = Int Function(Pointer<Pointer<Void>> handle);
+typedef FptrCreate = int Function(Pointer<Pointer<Void>> handle);
 
-typedef FptrDestroyFunc = Int Function(Pointer<Void> handle);
-typedef FptrDestroy = int Function(Pointer<Void> handle);
+typedef FptrDestroyFunc = Int Function(Pointer<Pointer<Void>> handle);
+typedef FptrDestroy = int Function(Pointer<Pointer<Void>> handle);
 
-typedef FptrErrorCodeFunc = Int Function(Int handle);
-typedef FptrErrorCode = int Function(int handle);
+typedef FptrErrorCodeFunc = Int Function(Pointer<Void> handle);
+typedef FptrErrorCode = int Function(Pointer<Void> handle);
 
 typedef FptrShowPropertiesFunc = Int Function(
     Pointer<Void> handle, Int parentType, Pointer<Int>);
@@ -67,13 +67,14 @@ void main(List<String> arguments) {
   print(version.toDartString());
 
   int result;
+  Pointer<Pointer<Void>> handle = calloc();
   Pointer<Void> fptr = calloc<Uint64>() as Pointer<Void>;
   print('1');
-  result = fptrCreate(fptr);
+  result = fptrCreate(handle);
   print('2 $result');
-  result = fptrErrorCode(fptr.address);
+  result = fptrErrorCode(handle.value);
   print('3 $result');
-  fptrDestroy(fptr);
+  fptrDestroy(handle);
 
   return;
 
