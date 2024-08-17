@@ -42,6 +42,10 @@ void main(List<String> arguments) {
       .lookup<NativeFunction<FptrDestroyFunc>>('libfptr_destroy')
       .asFunction();
 
+  final FptrShowProperties fptrShowProperties = dylib
+      .lookup<NativeFunction<FptrShowPropertiesFunc>>('libfptr_show_properties')
+      .asFunction();
+
   final FptrOpen fptrOpen =
       dylib.lookup<NativeFunction<FptrOpenFunc>>('libfptr_open').asFunction();
 
@@ -59,8 +63,10 @@ void main(List<String> arguments) {
   print('1');
   fptrCreate(fptr);
   print('2');
-  fptrDestroy(fptr);
+  fptrShowProperties(fptr, 0, nullptr);
   print('3');
+  fptrDestroy(fptr);
+  print('4');
 
   return;
 
