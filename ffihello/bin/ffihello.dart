@@ -5,11 +5,14 @@ import 'package:ffi/ffi.dart';
 typedef FptrGetVersionStrigFunc = Pointer<Utf8> Function();
 typedef FptrGetVersionStrig = Pointer<Utf8> Function();
 
-typedef FptrCreateFunc = Int Function(Pointer<Void> handle);
-typedef FptrCreate = int Function(Pointer<Void> handle);
+typedef FptrCreateFunc = Int Function(Pointer<Pointer<Void>> handle);
+typedef FptrCreate = int Function(Pointer<Pointer<Void>> handle);
 
 typedef FptrDestroyFunc = Int Function(Pointer<Void> handle);
 typedef FptrDestroy = int Function(Pointer<Void> handle);
+
+typedef FptrErrorCodeFunc = Int Function(Pointer<Void> handle);
+typedef FptrErrorCode = int Function(Pointer<Void> handle);
 
 typedef FptrShowPropertiesFunc = Int Function(
     Pointer<Void> handle, Int parentType, Pointer<Int>);
@@ -42,6 +45,10 @@ void main(List<String> arguments) {
       .lookup<NativeFunction<FptrDestroyFunc>>('libfptr_destroy')
       .asFunction();
 
+  final FptrErrorCode fptrErrorCode = dylib
+      .lookup<NativeFunction<FptrErrorCodeFunc>>('libfptr_error_code')
+      .asFunction();
+
   final FptrShowProperties fptrShowProperties = dylib
       .lookup<NativeFunction<FptrShowPropertiesFunc>>('libfptr_show_properties')
       .asFunction();
@@ -60,19 +67,24 @@ void main(List<String> arguments) {
   print(version.toDartString());
 
   int result;
-  Pointer<Void> fptr = nullptr;
+  Pointer<Pointer<Void>> fptr = nullptr;
   print('1');
   result = fptrCreate(fptr);
   print('2 $result');
+
+  return;
+
+/*   result = fptrErrorCode(fptr);
+  print('3 $result');
   fptrShowProperties(fptr, 0, nullptr);
-  print('3');
-  fptrOpen(fptr);
   print('4');
+  fptrOpen(fptr);
+  print('5');
   print("kkt is ${fptrIsOpened(fptr)}");
   fptrClose(fptr);
-  print('5');
-  fptrDestroy(fptr);
   print('6');
+  fptrDestroy(fptr);
+  print('7'); */
 
   return;
 }
