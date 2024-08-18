@@ -28,6 +28,24 @@ typedef FptrIsOpened = bool Function(Pointer<Void> handle);
 typedef FptrCloseFunc = Int Function(Pointer<Void> handle);
 typedef FptrClose = int Function(Pointer<Void> handle);
 
+typedef FptrBeepFunc = Int Function(Pointer<Void> handle);
+typedef FptrBeep = int Function(Pointer<Void> handle);
+
+typedef FptrLineFeedFunc = Int Function(Pointer<Void> handle);
+typedef FptrLineFeed = int Function(Pointer<Void> handle);
+
+typedef FptrPrintClicheFunc = Int Function(Pointer<Void> handle);
+typedef FptrPrintCliche = int Function(Pointer<Void> handle);
+
+typedef FptrBeginNonfiscalDocumentFunc = Int Function(Pointer<Void> handle);
+typedef FptrBeginNonfiscalDocument = int Function(Pointer<Void> handle);
+
+typedef FptrEndNonfiscalDocumentFunc = Int Function(Pointer<Void> handle);
+typedef FptrEndNonfiscalDocument = int Function(Pointer<Void> handle);
+
+typedef FptrPrintTextFunc = Int Function(Pointer<Void> handle);
+typedef FptrPrintText = int Function(Pointer<Void> handle);
+
 void main(List<String> arguments) {
   final dylib = DynamicLibrary.open(
       "C:\\Program Files\\ATOL\\Drivers10\\KKT\\bin\\fptr10.dll");
@@ -63,32 +81,64 @@ void main(List<String> arguments) {
   final FptrClose fptrClose =
       dylib.lookup<NativeFunction<FptrCloseFunc>>('libfptr_close').asFunction();
 
+  final FptrBeep fptrBeep =
+      dylib.lookup<NativeFunction<FptrBeepFunc>>('libfptr_beep').asFunction();
+
+  final FptrLineFeed fptrLineFeed = dylib
+      .lookup<NativeFunction<FptrLineFeedFunc>>('libfptr_line_feed')
+      .asFunction();
+
+  final FptrPrintCliche fptrPrintCliche = dylib
+      .lookup<NativeFunction<FptrPrintClicheFunc>>('libfptr_print_cliche')
+      .asFunction();
+
+  final FptrBeginNonfiscalDocument fptrBeginNonfiscalDocument = dylib
+      .lookup<NativeFunction<FptrBeginNonfiscalDocumentFunc>>(
+          'libfptr_begin_nonfiscal_document')
+      .asFunction();
+
+  final FptrEndNonfiscalDocument fptrEndNonfiscalDocument = dylib
+      .lookup<NativeFunction<FptrEndNonfiscalDocumentFunc>>(
+          'libfptr_end_nonfiscal_document')
+      .asFunction();
+
+  final FptrPrintText fptrPrintText = dylib
+      .lookup<NativeFunction<FptrPrintTextFunc>>('libfptr_print_text')
+      .asFunction();
+
   final version = fptrGetVersionString();
   print(version.toDartString());
 
   int result;
   Pointer<Pointer<Void>> handle = calloc();
-  Pointer<Void> fptr = calloc<Uint64>() as Pointer<Void>;
-  print('1');
   result = fptrCreate(handle);
-  print('2 $result');
+  print('fptrCreate $result');
   result = fptrErrorCode(handle.value);
-  print('3 $result');
-  fptrDestroy(handle);
+  print('fptrErrorCode $result');
+/*   result = fptrShowProperties(handle.value, 0, nullptr);
+  print('fptrShowProperties $result'); */
+  result = fptrOpen(handle.value);
+  print('fptrOpen $result');
+  print("kkt is ${fptrIsOpened(handle.value)}");
 
-  return;
+  result = fptrBeep(handle.value);
+  print('fptrBeep $result');
+/*   result = fptrLineFeed(handle.value);
+  print('fptrFeed $result');
+  result = fptrPrintCliche(handle.value);
+  print('fptrPrintCliche $result'); */
 
-/*   result = fptrErrorCode(fptr);
-  print('3 $result');
-  fptrShowProperties(fptr, 0, nullptr);
-  print('4');
-  fptrOpen(fptr);
-  print('5');
-  print("kkt is ${fptrIsOpened(fptr)}");
-  fptrClose(fptr);
-  print('6');
-  
-  print('7'); */
+  result = fptrBeginNonfiscalDocument(handle.value);
+  print('fptrBeginNonfiscalDocument $result');
+  result = fptrPrintText(handle.value);
+  print('fptrPrintText $result');
+  result = fptrEndNonfiscalDocument(handle.value);
+  print('fptrEndNonfiscalDocument $result');
+
+  result = fptrClose(handle.value);
+  print('fptrClose $result');
+  result = fptrDestroy(handle);
+  print('fptrDestroy $result');
 
   return;
 }
