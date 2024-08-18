@@ -46,7 +46,34 @@ typedef FptrEndNonfiscalDocument = int Function(Pointer<Void> handle);
 typedef FptrPrintTextFunc = Int Function(Pointer<Void> handle);
 typedef FptrPrintText = int Function(Pointer<Void> handle);
 
-void main(List<String> arguments) {
+class Fptr {
+  Pointer<Pointer<Void>> handle = calloc();
+  final dylib = DynamicLibrary.open(
+      "C:\\Program Files\\ATOL\\Drivers10\\KKT\\bin\\fptr10.dll");
+
+  late FptrCreate fptrCreate;
+  late FptrDestroy fptrDestroy;
+
+  Fptr() {
+    fptrCreate = dylib
+        .lookup<NativeFunction<FptrCreateFunc>>('libfptr_create')
+        .asFunction();
+    fptrDestroy = dylib
+        .lookup<NativeFunction<FptrDestroyFunc>>('libfptr_destroy')
+        .asFunction();
+    fptrCreate(handle);
+  }
+
+  int destroy() {
+    return fptrDestroy(handle);
+  }
+}
+
+void main() {
+  print('hi');
+}
+
+void backup_main(List<String> arguments) {
   final dylib = DynamicLibrary.open(
       "C:\\Program Files\\ATOL\\Drivers10\\KKT\\bin\\fptr10.dll");
 
