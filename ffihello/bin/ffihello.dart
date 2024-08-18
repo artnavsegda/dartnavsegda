@@ -53,6 +53,7 @@ class Fptr {
 
   late FptrCreate fptrCreate;
   late FptrDestroy fptrDestroy;
+  late FptrGetVersionStrig fptrGetVersionString;
 
   Fptr() {
     fptrCreate = dylib
@@ -61,16 +62,28 @@ class Fptr {
     fptrDestroy = dylib
         .lookup<NativeFunction<FptrDestroyFunc>>('libfptr_destroy')
         .asFunction();
+    fptrGetVersionString = dylib
+        .lookup<NativeFunction<FptrGetVersionStrigFunc>>(
+            'libfptr_get_version_string')
+        .asFunction();
+
     fptrCreate(handle);
   }
 
   int destroy() {
     return fptrDestroy(handle);
   }
+
+  String version() {
+    return fptrGetVersionString().toDartString();
+  }
 }
 
 void main() {
   print('hi');
+  Fptr fptr = Fptr();
+  print(fptr.version());
+  fptr.destroy();
 }
 
 void backup_main(List<String> arguments) {
