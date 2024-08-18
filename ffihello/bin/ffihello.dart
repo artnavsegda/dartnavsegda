@@ -54,6 +54,11 @@ class Fptr {
   late FptrCreate fptrCreate;
   late FptrDestroy fptrDestroy;
   late FptrGetVersionStrig fptrGetVersionString;
+  late FptrShowProperties fptrShowProperties;
+  late FptrOpen fptrOpen;
+  late FptrIsOpened fptrIsOpened;
+  late FptrClose fptrClose;
+  late FptrBeep fptrBeep;
 
   Fptr() {
     fptrCreate = dylib
@@ -66,23 +71,41 @@ class Fptr {
         .lookup<NativeFunction<FptrGetVersionStrigFunc>>(
             'libfptr_get_version_string')
         .asFunction();
+    fptrShowProperties = dylib
+        .lookup<NativeFunction<FptrShowPropertiesFunc>>(
+            'libfptr_show_properties')
+        .asFunction();
+    fptrOpen =
+        dylib.lookup<NativeFunction<FptrOpenFunc>>('libfptr_open').asFunction();
+    fptrIsOpened = dylib
+        .lookup<NativeFunction<FptrIsOpenedFunc>>('libfptr_is_opened')
+        .asFunction();
+    fptrClose = dylib
+        .lookup<NativeFunction<FptrCloseFunc>>('libfptr_close')
+        .asFunction();
+    fptrBeep =
+        dylib.lookup<NativeFunction<FptrBeepFunc>>('libfptr_beep').asFunction();
 
     fptrCreate(handle);
   }
 
-  int destroy() {
-    return fptrDestroy(handle);
-  }
-
-  String version() {
-    return fptrGetVersionString().toDartString();
-  }
+  int destroy() => fptrDestroy(handle);
+  String version() => fptrGetVersionString().toDartString();
+  int showProperties() => fptrShowProperties(handle.value, 0, nullptr);
+  int open() => fptrOpen(handle.value);
+  bool isOpened() => fptrIsOpened(handle.value);
+  int close() => fptrClose(handle.value);
+  int beep() => fptrBeep(handle.value);
 }
 
 void main() {
   print('hi');
   Fptr fptr = Fptr();
   print(fptr.version());
+  fptr.showProperties();
+  fptr.open();
+  print("kkt is ${fptr.isOpened()}");
+  fptr.beep();
   fptr.destroy();
 }
 
